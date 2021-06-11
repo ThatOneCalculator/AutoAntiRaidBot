@@ -46,7 +46,22 @@ intents = discord.Intents.default()
 intents.members = True
 bot = commands.AutoShardedBot(command_prefix="!", description="Anti-raid bot made by ThatOneCalculator#1337", intents=intents, chunk_guilds_at_startup=True)
 
+version = "1.0.0"
+
 class Commands(commands.Cog):
+
+	def __init__(self, bot):
+		self.bot = bot
+		self.update_status.start()
+
+	@tasks.loop(minutes=10)
+	async def update_status(self):
+		await self.bot.wait_until_ready()
+		await asyncio.sleep(10)
+		await bot.change_presence(activity=discord.Activity(
+			type=discord.ActivityType.watching,
+			name=f"!help on {len(bot.guilds)} servers!"
+		))
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
@@ -81,7 +96,7 @@ class Commands(commands.Cog):
 	async def github(self, ctx):
 		"""Directs you to the GitHub repository for this bot."""
 
-		await ctx.send("https://github.com/ThatOneCalculator/AntiSpamBot")
+		await ctx.send("https://github.com/ThatOneCalculator/AutoAntiRaidBot")
 
 	@commands.command()
 	async def ping(self, ctx):
