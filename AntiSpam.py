@@ -60,6 +60,12 @@ class Commands(commands.Cog):
 			await member.kick()
 
 	@commands.command()
+	async def invite(self, ctx):
+		"""Sends the bot's invite link"""
+
+		await ctx.send("https://discord.com/api/oauth2/authorize?client_id=852703567495561256&permissions=6&scope=bot")
+
+	@commands.command()
 	async def about(self, ctx):
 		"""Describes the bot"""
 
@@ -105,7 +111,7 @@ class Commands(commands.Cog):
 async def on_ready():
 	await bot.change_presence(activity=discord.Activity(
 		type=discord.ActivityType.watching,
-		name=f"anti-spam on {len(bot.guilds)} servers!"
+		name=f"!help on {len(bot.guilds)} servers!"
 	))
 	print("Logged in!")
 
