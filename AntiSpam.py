@@ -46,7 +46,7 @@ intents = discord.Intents.default()
 intents.members = True
 bot = commands.AutoShardedBot(command_prefix="!", description="Anti-raid bot made by ThatOneCalculator#1337", intents=intents, chunk_guilds_at_startup=True)
 
-class SussyMogus(commands.Cog):
+class Commands(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
@@ -60,6 +60,12 @@ class SussyMogus(commands.Cog):
 			await member.kick()
 
 	@commands.command()
+	async def about(self, ctx):
+		"""Describes the bot"""
+
+		await ctx.send("Will automatically kick any member with an account made under 1 day ago, and will ban any member with a blacklisted name. Create an issue or PR on the GitHub if you wanna add blacklisted names.")
+
+	@commands.command()
 	async def literallynobot(self, ctx):
 		"""Directs you to ThatOneCalculator's main bot"""
 
@@ -71,11 +77,35 @@ class SussyMogus(commands.Cog):
 
 		await ctx.send("https://github.com/ThatOneCalculator/AntiSpamBot")
 
+	@commands.command()
+	async def ping(self, ctx):
+		"""Pings the bot"""
+
+		shardscounter = []
+		for guild in self.bot.guilds:
+			if guild.shard_id not in shardscounter:
+				shardscounter.append(guild.shard_id)
+		shards = []
+		for i in shardscounter:
+			shards.append(self.bot.get_shard(i))
+		allmembers = 0
+		for guild in self.bot.guilds:
+			allmembers += guild.member_count
+		ping = await ctx.send(f":ping_pong: Pong! Bot latency is {str(round((bot.latency * 1000),2))} milliseconds.")
+		beforeping = datetime.datetime.now()
+		await ping.edit(content="Pinging!")
+		afterping = datetime.datetime.now()
+		pingdiff = afterping - beforeping
+		pingdiffms = pingdiff.microseconds / 1000
+		uptime = afterping - upsince
+		await ping.edit(content=f"🏓 Pong! Bot latency is {str(round((bot.latency * 1000),2))} milliseconds.\n☎️ API latency is {str(round((pingdiffms),2))} milliseconds.\n:coffee: I have been up for {humanfriendly.format_timespan(uptime)}.\n🔮 This guild is on shard {ctx.guild.shard_id}, with a total of {len(shards)} shards.\n\nI am in {str(len(self.bot.guilds))} servers with a total of {allmembers} people on version {version}.")
+
+
 @bot.event
 async def on_ready():
 	await bot.change_presence(activity=discord.Activity(
 		type=discord.ActivityType.watching,
-		name=f"anti-spam on {len(bot.guilds)} servers!}"
+		name=f"anti-spam on {len(bot.guilds)} servers!"
 	))
 	print("Logged in!")
 
@@ -87,7 +117,7 @@ def read_token():
 
 token = read_token()
 
-bot.add_cog(SussyMogus(bot))
+bot.add_cog(Commands(bot))
 
 bot.run(token)
 print("Logged in!")
