@@ -46,7 +46,7 @@ intents = discord.Intents.default()
 intents.members = True
 bot = commands.AutoShardedBot(command_prefix="!", description="Anti-raid bot made by ThatOneCalculator#1337", intents=intents, chunk_guilds_at_startup=True)
 
-version = "1.0.0"
+version = "1.1.0"
 
 class Commands(commands.Cog):
 
