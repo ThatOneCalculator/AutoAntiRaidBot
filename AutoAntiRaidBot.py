@@ -66,7 +66,8 @@ class Commands(commands.Cog):
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
 		await bot.wait_until_ready()
-		if "h0nda" in member.name:
+		names_to_check = ["h0nda", "chagex", ".com", ".eth", "nitro"]
+		if any(i in member.name.lower() for i in names_to_check):
 			await member.ban()
 		now = datetime.datetime.now()
 		diff = now - member.created_at
